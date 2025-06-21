@@ -118,5 +118,29 @@ class ProfileView(APIView):
                 "success": False,
                 "error": "Unable to fetch profile. Please try again later."
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def put(self, request):
+        try:
+            user = request.user
+            serializer = ProfileSerializer(user, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    "success": True,
+                    "message": "Profile updated successfully.",
+                    "data": serializer.data
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    "success": False,
+                    "error": serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception:
+            return Response({
+                "success": False,
+                "error": "Unable to update profile."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

@@ -21,4 +21,4 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['name', 'email', 'age']
+        fields = ['id','name', 'email', 'age']
