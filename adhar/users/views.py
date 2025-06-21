@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from .producer import send_api_usage_log
 from django.contrib.auth import get_user_model
 
+
 User = get_user_model()
 class RegisterView(APIView):
     def post(self, request):
@@ -91,5 +92,55 @@ class SecureDataView(APIView):
             path=request.path
         )
         return Response({"success":True,"message": "Secure data for you!"})
+    
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user = request.user
+            serializer = ProfileSerializer(user)
+
+            if not serializer.data:
+                return Response({
+                    "success": False,
+                    "error": "No profile data found."
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            return Response({
+                "success": True,
+                "data": serializer.data
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({
+                "success": False,
+                "error": "Unable to fetch profile. Please try again later."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def put(self, request):
+        try:
+            user = request.user
+            serializer = ProfileSerializer(user, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    "success": True,
+                    "message": "Profile updated successfully.",
+                    "data": serializer.data
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    "success": False,
+                    "error": serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception:
+            return Response({
+                "success": False,
+                "error": "Unable to update profile."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

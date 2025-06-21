@@ -15,3 +15,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             age=validated_data['age'],
             password=validated_data['password']
         )
+
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id','name', 'email', 'age']
