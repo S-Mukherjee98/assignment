@@ -142,5 +142,42 @@ class ProfileView(APIView):
                 "success": False,
                 "error": "Unable to update profile."
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = request.user
+            old_password = serializer.validated_data.get('old_password')
+            new_password = serializer.validated_data.get('new_password')
+
+            if not user.check_password(old_password):
+                return Response({
+                    "success": False,
+                    "error": "Old password is incorrect."
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user.set_password(new_password)
+                user.save()
+
+                return Response({
+                    "success": True,
+                    "message": "Password changed successfully."
+                }, status=status.HTTP_200_OK)
+
+            except Exception:
+                return Response({
+                    "success": False,
+                    "error": "Something went wrong while changing the password."
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({
+            "success": False,
+            "error": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 

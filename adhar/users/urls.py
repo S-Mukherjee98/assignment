@@ -12,4 +12,5 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('test/', TestView.as_view(), name='test'),
     path('secure-data/', SecureDataView.as_view(), name='secure-data'),
+    path('reset-password/', ChangePasswordView.as_view(), name='reset-password'),
 ]
