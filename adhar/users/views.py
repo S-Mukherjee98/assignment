@@ -12,10 +12,12 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 from rest_framework.permissions import IsAuthenticated
 from .producer import send_api_usage_log
 from django.contrib.auth import get_user_model
+from .throttles import *
 
 
 User = get_user_model()
 class RegisterView(APIView):
+    throttle_classes = [RegistrationRateThrottle]
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -25,6 +27,7 @@ class RegisterView(APIView):
 
 # Login view
 class LoginView(TokenObtainPairView):
+    throttle_classes = [LoginRateThrottle]
     def post(self, request, *args, **kwargs):
         try:
             response = super().post(request, *args, **kwargs)
@@ -66,7 +69,6 @@ class TestView(APIView):
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             refresh_token = request.data["refresh"]
