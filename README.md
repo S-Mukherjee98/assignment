@@ -11,7 +11,7 @@ This is a Django REST API project that supports user registration, login/logout 
 - Profile view and update (via access token)
 - Kafka event logging
 - Swagger & ReDoc API documentation
-
+- Change Password
 ---
 
 ## Requirements
@@ -45,6 +45,14 @@ POST /api/register/ – Register a new user
 POST /api/login/ – Login and receive JWT tokens
 
 POST /api/logout/ – Logout and blacklist the refresh token
+
+POST /api/profile/ – To get the profile
+
+POST /api/secure-data/ – simulation of kafka 
+
+POST /api/rest-password/ – To reset the password
+
+POST /api/test/ – Test API which returns a message only
 
 Profile
 GET /api/profile/ – View logged-in user's profile
