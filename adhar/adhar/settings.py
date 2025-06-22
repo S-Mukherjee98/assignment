@@ -141,5 +141,15 @@ REST_FRAMEWORK = {
         'users.authentication.VersionedJWTAuthentication',
     ),
     'EXCEPTION_HANDLER': 'utils.exception_handler.custom_exception_handler',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '300/hour',
+        'anon': '200/hour',
+        'login': '5/min',  
+        'registration': '5/min',
+    }
 }
 
