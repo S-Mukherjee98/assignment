@@ -12,6 +12,7 @@ This is a Django REST API project that supports user registration, login/logout 
 - Kafka event logging
 - Swagger & ReDoc API documentation
 - Change Password
+- Custom and Default Ratelimiting is attached
 ---
 
 ## Requirements
